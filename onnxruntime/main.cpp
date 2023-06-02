@@ -108,7 +108,12 @@ void YOLOV7::normalize_(Mat img)
 		{
 			for (int j = 0; j < col; j++)
 			{
-				float pix = img.ptr<uchar>(i)[j * 3 + 2 - c];
+				float pix = img.ptr<uchar>(i)[j * 3 + 2 - c];   // BGR -> RGB
+				/*
+					B00 G00 R00   B01 G01 R01  B02 G02 R02  B03 G03 R03
+					B10 G10 R10   B11 G11 R11  B12 G12 R12  B13 G13 R13
+					B20 G20 R20   B21 G21 R21  B22 G22 R22  B23 G23 R23
+				*/
 				this->input_image_[c * row * col + i * col + j] = pix / 255.0;
 			}
 		}
@@ -187,7 +192,7 @@ void YOLOV7::detect(Mat& frame)
 			}
 			max_class_socre *= box_score;
 			if (max_class_socre > this->confThreshold)
-			{ 
+			{
 				float cx = pdata[0] * ratiow;  ///cx
 				float cy = pdata[1] * ratioh;   ///cy
 				float w = pdata[2] * ratiow;   ///w
